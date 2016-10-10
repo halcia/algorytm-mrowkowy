@@ -1,4 +1,4 @@
-function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h)
+function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h,ship_param)
 % TURNCIRCLE  [t,u,v,r,x,y,psi,U] = turncircle(ship,x,ui,t_final,t_rudderexecute,h)
 %             computes the turning circle maneuvering indexes, see ExTurnCircle.m
 %
@@ -41,7 +41,7 @@ function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h)
 % E-mail: contact@marinecontrol.org
 % URL:    <http://www.marinecontrol.org>
 
-if nargin~=6, error('number of inputs must be 6'); end
+if nargin~=7, error('number of inputs must be 6'); end
 if t_final<t_rudderexecute, error('t_final must be larger than t_rudderexecute'); end
 
 N = round(t_final/h);               % number of samples
@@ -69,7 +69,7 @@ for i=1:N+1,
        u_ship(1) = 0;   % zero rudder angle
     end     
     
-    [xdot,U] = feval(ship,x,u_ship);       % ship model
+    [xdot,U] = feval(ship,x,u_ship,ship_param);       % ship model
     
     xout(i,:) = [time,x(1:6)',U];  
     

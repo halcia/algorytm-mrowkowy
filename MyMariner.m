@@ -1,4 +1,4 @@
-function [xdot,U] = MyMariner(x,ui,U0)
+function [xdot,U] = MyMariner(x,ui,xxx,U0)
 % [xdot,U] = mariner(x,ui) returns the speed U in m/s (optionally) and the 
 % time derivative of the state vector: x = [ u v r x y psi delta n ]'  for
 % the Mariner class vessel L = 160.93 m, where
@@ -49,10 +49,11 @@ function [xdot,U] = MyMariner(x,ui,U0)
 % E-mail: contact@marinecontrol.org
 % URL:    <http://www.marinecontrol.org>
 
+
 % Check of input and state dimensions
 if (length(x)  ~= 7),error('x-vector must have dimension 7 !'); end
 if (length(ui) ~= 1),error('ui must be a scalar input!'); end
-if nargin==2, U0 = 7.7175; end
+if nargin==3, U0 = 7.7175; end
 
 % Normalization variables
 L = 160.93;
@@ -78,7 +79,7 @@ xG = -0.023;
 % zmieni³em Xu
 
 Xudot =  -42e-5;   Yvdot =  -748e-5;   Nvdot = 4.646e-5;
-Xu    = -100e-5;   Yrdot =-9.354e-5;   Nrdot = -43.8e-5;
+Xu    = xxx(1);   Yrdot =-9.354e-5;   Nrdot = -43.8e-5;
 Xuu   = -110e-5;   Yv    = -1160e-5;   Nv    =  -264e-5;
 Xuuu  = -215e-5;   Yr    =  -499e-5;   Nr    =  -166e-5;
 Xvv   = -899e-5;   Yvvv  = -8078e-5;   Nvvv  =  1636e-5;
