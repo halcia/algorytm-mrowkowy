@@ -41,7 +41,7 @@ function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h,
 % E-mail: contact@marinecontrol.org
 % URL:    <http://www.marinecontrol.org>
 
-if nargin~=7, error('number of inputs must be 6'); end
+if nargin~=7, error('number of inputs must be 7'); end
 if t_final<t_rudderexecute, error('t_final must be larger than t_rudderexecute'); end
 
 N = round(t_final/h);               % number of samples
@@ -86,10 +86,12 @@ y     = xout(:,6);
 psi   = xout(:,7)*180/pi;
 U     = xout(:,8);
 
+
 Nrudder = round(t_rudderexecute/h); 
 Nrudder = round(t_rudderexecute/h);
+% global Nrudder1;
 
-% turning radius, tactical diameter, advance and transfer
+%turning radius, tactical diameter, advance and transfer
 disp(' ')
 disp(sprintf('Rudder execute (x-coordinate)          : %4.0f m',abs(x(Nrudder))))
 disp(sprintf('Steady turning radius                  : %4.0f m',U(N+1)/abs(r(N+1)*pi/180)))
@@ -108,5 +110,4 @@ title('Turning circle (* = rudder execute, o = 90 deg heading)')
 figure
 subplot(211),plot(t,r),xlabel('time (s)'),title('yaw rate r (deg/s)'),grid
 subplot(212),plot(t,U),xlabel('time (s)'),title('speed U (m/s)'),grid
-
 

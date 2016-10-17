@@ -76,17 +76,17 @@ m  = 798e-5;
 Iz = 39.2e-5;
 xG = -0.023;
 
-% zmieni³em Xu
+% zmieni?em Xu
 
 Xudot =  -42e-5;   Yvdot =  -748e-5;   Nvdot = 4.646e-5;
 Xu    = xxx(1);   Yrdot =-9.354e-5;   Nrdot = -43.8e-5;
 Xuu   = -110e-5;   Yv    = -1160e-5;   Nv    =  -264e-5;
-Xuuu  = -215e-5;   Yr    =  -499e-5;   Nr    =  -166e-5;
+Xuuu  = -215e-5;   Yr    =  -499e-5;   Nr    =  xxx(3);
 Xvv   = -899e-5;   Yvvv  = -8078e-5;   Nvvv  =  1636e-5;
 Xrr   =   18e-5;   Yvvr  = 15356e-5;   Nvvr  = -5483e-5;
 Xdd   =  -95e-5;   Yvu   = -1160e-5;   Nvu   =  -264e-5;
 Xudd  = -190e-5;   Yru   =  -499e-5;   Nru   =  -166e-5;
-Xrv   =  798e-5;   Yd    =   278e-5;   Nd    =  -139e-5;
+Xrv   =  798e-5;   Yd    =   xxx(2);   Nd    =  -139e-5;
 Xvd   =   93e-5;   Yddd  =   -90e-5;   Nddd  =    45e-5;
 Xuvd  =   93e-5;   Yud   =   556e-5;   Nud   =  -278e-5;
                    Yuud  =   278e-5;   Nuud  =  -139e-5;
