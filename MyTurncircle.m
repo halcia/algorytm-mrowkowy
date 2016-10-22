@@ -16,7 +16,7 @@ function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h,
 %
 % Author:    Thor I. Fossen
 % Date:      18th July 2001
-% Revisions: 25th November 2002, expression for Nrudder was corrected, included
+% Revisions: 25th November 2002, expression for Nrudder1 was corrected, included
 %                 plots for rudder execute, 90 deg heading angle
 % ________________________________________________________________
 %
@@ -86,28 +86,28 @@ y     = xout(:,6);
 psi   = xout(:,7)*180/pi;
 U     = xout(:,8);
 
+global Nrudder1;
+Nrudder1 = round(t_rudderexecute/h); 
+Nrudder1 = round(t_rudderexecute/h);
 
-Nrudder = round(t_rudderexecute/h); 
-Nrudder = round(t_rudderexecute/h);
-% global Nrudder1;
 
 %turning radius, tactical diameter, advance and transfer
 disp(' ')
-disp(sprintf('Rudder execute (x-coordinate)          : %4.0f m',abs(x(Nrudder))))
+disp(sprintf('Rudder execute (x-coordinate)          : %4.0f m',abs(x(Nrudder1))))
 disp(sprintf('Steady turning radius                  : %4.0f m',U(N+1)/abs(r(N+1)*pi/180)))
 disp(sprintf('Maximum transfer                       : %4.0f m',abs(max(abs(y)))))
-disp(sprintf('Maximum advance                        : %4.0f m',abs(max(abs(x))-x(Nrudder))))      
+disp(sprintf('Maximum advance                        : %4.0f m',abs(max(abs(x))-x(Nrudder1))))      
 disp(sprintf('Transfer at 90 (deg) heading           : %4.0f m',abs(transfer)))    
-disp(sprintf('Advance at 90 (deg) heading            : %4.0f m',abs(advance-x(Nrudder))))        
+disp(sprintf('Advance at 90 (deg) heading            : %4.0f m',abs(advance-x(Nrudder1))))        
 disp(sprintf('Tactical diameter at 180 (deg) heading : %4.0f m',abs(tactical)))
-
-% plots
-figure
-plot(x,y,x(Nrudder),y(Nrudder),'linewidth',2), hold on
-plot(x(Nrudder),y(Nrudder),'*r',advance,transfer,'or'), hold off
-grid,axis('equal'),xlabel('x-position'),ylabel('y-position')
-title('Turning circle (* = rudder execute, o = 90 deg heading)')
-figure
-subplot(211),plot(t,r),xlabel('time (s)'),title('yaw rate r (deg/s)'),grid
-subplot(212),plot(t,U),xlabel('time (s)'),title('speed U (m/s)'),grid
+% 
+% % plots
+% figure(1)
+% plot(x,y,x(Nrudder1),y(Nrudder1),'linewidth',2), hold on
+% plot(x(Nrudder1),y(Nrudder1),'*r',advance,transfer,'or'), hold off
+% grid,axis('equal'),xlabel('x-position'),ylabel('y-position')
+% title('Turning circle (* = rudder execute, o = 90 deg heading)')
+% figure(2)
+% subplot(211),plot(t,r),xlabel('time (s)'),title('yaw rate r (deg/s)'),grid
+% subplot(212),plot(t,U),xlabel('time (s)'),title('speed U (m/s)'),grid
 
