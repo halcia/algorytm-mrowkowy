@@ -1,4 +1,4 @@
-function [t,u,v,r,x,y,psi,U] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h,ship_param)
+function [t,u,v,r,x,y,psi,U,Nrudder1,advance1,transfer1] = MyTurncircle(ship,x,ui,t_final,t_rudderexecute,h,ship_param)
 % TURNCIRCLE  [t,u,v,r,x,y,psi,U] = turncircle(ship,x,ui,t_final,t_rudderexecute,h)
 %             computes the turning circle maneuvering indexes, see ExTurnCircle.m
 %
@@ -54,8 +54,8 @@ for i=1:N+1,
     time = (i-1)*h;
     
     if round(abs(x(6))*180/pi)>=90 & store1==1, 
-        transfer=x(5);   % transfer at 90 deg
-        advance =x(4);   % advance at 90 deg
+        transfer1=x(5);   % transfer1 at 90 deg
+        advance1 =x(4);   % advance1 at 90 deg
         store1 = 0;
     end
     
@@ -86,25 +86,25 @@ y     = xout(:,6);
 psi   = xout(:,7)*180/pi;
 U     = xout(:,8);
 
-global Nrudder1;
+
 Nrudder1 = round(t_rudderexecute/h); 
 Nrudder1 = round(t_rudderexecute/h);
 
 
-%turning radius, tactical diameter, advance and transfer
-disp(' ')
-disp(sprintf('Rudder execute (x-coordinate)          : %4.0f m',abs(x(Nrudder1))))
-disp(sprintf('Steady turning radius                  : %4.0f m',U(N+1)/abs(r(N+1)*pi/180)))
-disp(sprintf('Maximum transfer                       : %4.0f m',abs(max(abs(y)))))
-disp(sprintf('Maximum advance                        : %4.0f m',abs(max(abs(x))-x(Nrudder1))))      
-disp(sprintf('Transfer at 90 (deg) heading           : %4.0f m',abs(transfer)))    
-disp(sprintf('Advance at 90 (deg) heading            : %4.0f m',abs(advance-x(Nrudder1))))        
-disp(sprintf('Tactical diameter at 180 (deg) heading : %4.0f m',abs(tactical)))
+%turning radius, tactical diameter, advance1 and transfer1
+% disp(' ')
+% disp(sprintf('Rudder execute (x-coordinate)          : %4.0f m',abs(x(Nrudder1))))
+% disp(sprintf('Steady turning radius                  : %4.0f m',U(N+1)/abs(r(N+1)*pi/180)))
+% disp(sprintf('Maximum transfer1                       : %4.0f m',abs(max(abs(y)))))
+% disp(sprintf('Maximum advance1                        : %4.0f m',abs(max(abs(x))-x(Nrudder1))))      
+% disp(sprintf('transfer1 at 90 (deg) heading           : %4.0f m',abs(transfer1)))    
+% disp(sprintf('advance1 at 90 (deg) heading            : %4.0f m',abs(advance1-x(Nrudder1))))        
+% disp(sprintf('Tactical diameter at 180 (deg) heading : %4.0f m',abs(tactical)))
 % 
 % % plots
 % figure(1)
 % plot(x,y,x(Nrudder1),y(Nrudder1),'linewidth',2), hold on
-% plot(x(Nrudder1),y(Nrudder1),'*r',advance,transfer,'or'), hold off
+% plot(x(Nrudder1),y(Nrudder1),'*r',advance1,transfer1,'or'), hold off
 % grid,axis('equal'),xlabel('x-position'),ylabel('y-position')
 % title('Turning circle (* = rudder execute, o = 90 deg heading)')
 % figure(2)

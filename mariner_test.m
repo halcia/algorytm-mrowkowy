@@ -12,15 +12,16 @@ global Nrudder;
 global t2;
 global U2;
 global r2;
-global u1;
 global y1;
 global x1;
 global t1;
 global r1;
 global U1;
+global advance1;
+global transfer1;
 
 
-[t2,u2,v2,r2,x2,y2,psi2,U2] = turncircle('mariner',x,ui,t_final,t_rudderexecute,h);
+[t2,u2,v2,r2,x2,y2,psi2,U2,Nrudder,advance,transfer] = turncircle('mariner',x,ui,t_final,t_rudderexecute,h);
 
 para = [-100e-5, 270e-5, -160e-5];
 
@@ -39,4 +40,15 @@ hold on;
 plot(t2,U2,'g')
 hold off;
 legend('U1','U2')
+
+figure
+plot(x1,y1,x1(Nrudder1),y1(Nrudder1),'linewidth',2), hold on
+plot(x1(Nrudder1),y1(Nrudder1),'*r',advance1,transfer1,'or'), hold on
+grid,axis('equal'),xlabel('x-position'),ylabel('y-position')
+title('Turning circle (* = rudder execute, o = 90 deg heading)')
+
+plot(x2,y2,x2(Nrudder),y2(Nrudder),'linewidth',2), hold on
+plot(x2(Nrudder),y2(Nrudder),'*r',advance,transfer,'or'), hold off
+grid,axis('equal'),xlabel('x-position'),ylabel('y-position')
+title('Turning circle (* = rudder execute, o = 90 deg heading)')
 
