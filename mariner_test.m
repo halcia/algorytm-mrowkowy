@@ -4,14 +4,14 @@ ui = -35*pi/180;
 t_final = 700;          % final simulation time (sec)
 t_rudderexecute = 100;   % time rudder is executed (sec)
 h = 0.1;                 % sampling time (sec)
-% global u2;
-% global y2;
-% global x2;
+global u2;
+global y2;
+global x2;
 global Nrudder1;
-% global Nrudder;
-% global t2;
-% global U2;
-% global r2;
+global Nrudder;
+global t2;
+global U2;
+global r2;
 global y1;
 global x1;
 global t1;
