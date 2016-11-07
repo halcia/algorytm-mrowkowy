@@ -4,7 +4,7 @@ clc;
 H=30; %zakres zmian warto¶ci parametrów
 M=15; %liczba mrówek
 n=3; %liczba parametrów
-iter=20; %max liczba iteracji
+iter=3; %max liczba iteracji
 alfa=1;
 Q=0.2;%wspó³czynnik skaluj±cy ilo¶æ zostawianych feromonów
 ro=0.05 %warto¶æ szybko¶ci parowania ¶ladu feromonowego
@@ -55,57 +55,59 @@ for j=1:n
     end
 end
 
-%tworzenie macierzy prawdopodobieñstw na podstawie wzoru
-    for j=1:n
-        for i=1:H
-    alfa_feromony=feromony.^alfa;
-    s=sum(alfa_feromony(:,j));
-    prawdop=(1/s).*alfa_feromony; %feromony
-        end
-    end
+
 
     
     
      %pêtla wyboru wêz³a
-%     for l=iter
+     for l=1:iter
     for i=1:M
+                %tworzenie macierzy prawdopodobieñstw na podstawie wzoru
+                for j=1:n
+                alfa_feromony=feromony.^alfa;
+                s=sum(alfa_feromony(:,j));
+                prawdop=(1/s).*alfa_feromony; %feromony
+                end
+                
          for j=1:n
             r=rand;
             s=0;
+    
             for k=1:H %numer wezla
                 s=s+prawdop(k,j);%uzycie kola ruletki
                 if r<=s
                     trasa(i,j)=parametry(k,j); %zapisywana warto¶æ wybranego wêz³a w macierzy trasy
+                    ktory_wezel(i,j)=k;
                     break
                 end
             end    
        end
      
          %wyznaczanie wskaznika jako¶ci dla trasy pierwszej mrówki
-            %[JE]=funkcjabledu(trasa);
+
             trasa_mrowki(1,:)=trasa(i,:) %trasa i-tej mrówki(i-ty wiersz macierzy trasa)
             
             wskaznik(i,1)=funkcjabledu(trasa_mrowki);
             
-            
             %aktualizacja lokalna feromonów
-%             for j=1:n
-%                 for i=1:H
-%                    
-%                       feromony(i,j)=feromony(i,j)+(Q/(wskazniki))
-%  
-%                 end
-%             end
+            trasa_w_wezlach(1,:)=ktory_wezel(i,:);
+            pierwszy_el=trasa_w_wezlach(1);
+            drugi_el=trasa_w_wezlach(2);
+            trzeci_el=trasa_w_wezlach(3);
+            
+                      feromony(pierwszy_el,1)=feromony(pierwszy_el,1)+(Q/(wskaznik(i,1)));
+                      feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,1)));
+                      feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,1)));
+ 
+           
      end
 %     %sprawdzanie czy najlepszy wska¼nik
-%     [JE_cyklu]=funkcjabledu(trasa)
-%     if JE_cyklu_nowy<JE_cyklu
-%         trasa
-%         
+        best_wskaznik_cyklu(l)=min(wskaznik);
+        the_best=min(best_wskaznik_cyklu);
 %     %aktualizacja globalna feromonów
-%     feromony(i,j)=(1-ro)feromony(i,j)+(1/(JE_cyklu_))
+    feromony(i,j)=(1-ro).*feromony(i,j)+(1/(the_best));
 %     
-%     end
+     end
 % 
 %     
 
