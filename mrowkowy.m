@@ -1,11 +1,11 @@
 clear;
 clc;
 
-H=30; %zakres zmian warto¶ci parametrów
-M=15; %liczba mrówek
+H=100; %zakres zmian warto¶ci parametrów
+M=30; %liczba mrówek
 n=3; %liczba parametrów
-iter=3; %max liczba iteracji
-alfa=1;
+iter=20; %max liczba iteracji
+alfa=2;
 Q=0.2;%wspó³czynnik skaluj±cy ilo¶æ zostawianych feromonów
 ro=0.05 %warto¶æ szybko¶ci parowania ¶ladu feromonowego
 
@@ -100,23 +100,35 @@ end
                       feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,l)));
                       feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,l)));
                       
-                      
-                      [E(l),F(l)]=min(wskaznik(:,l));
+                      %     %sprawdzanie czy najlepszy wska¼nik
+                     if i>=2 && i<=M
+                         najlepsze_trasy(l,:)=trasa(1,:);
+                         
+                         if wskaznik(i,l)<=wskaznik(i-1,l)
+                         najlepszy(l,:)=wskaznik(i,l);
+                         najlepsze_trasy(l,:)=trasa(i,:);
+                         [A,B]=min(najlepszy);
+                         najlepsza_trasa=najlepsze_trasy(B,:);
+                         najlepszy_wskaznik=A;
+                        break
+                         end
+                     end
+                     
                       
      
     
                       
     end
     
-%     %sprawdzanie czy najlepszy wska¼nik
 
-          [A,B]=min(wskaznik);  %dla iteracji D-- sprawdzam jaka jest warto¶c (tzn która mrówka najlepsza)
-          [C,D]=min(A); %D-która iteracja ma warto¶æ wska¼nika min
-       
+
+%           [A,B]=min(wskaznik);  %dla iteracji D-- sprawdzam jaka jest warto¶c (tzn która mrówka najlepsza)
+%           [C,D]=min(A); %D-która iteracja ma warto¶æ wska¼nika min
+%        
 %     %aktualizacja globalna feromonów
     for jj=1:n
         for ii=1:H
-            feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/C);
+            feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/A);
         end
     end
     
