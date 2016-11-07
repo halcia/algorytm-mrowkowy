@@ -63,9 +63,9 @@ end
      for l=1:iter
     for i=1:M
                 %tworzenie macierzy prawdopodobieñstw na podstawie wzoru
-                for j=1:n
+                for g=1:n
                 alfa_feromony=feromony.^alfa;
-                s=sum(alfa_feromony(:,j));
+                s=sum(alfa_feromony(:,g));
                 prawdop=(1/s).*alfa_feromony; %feromony
                 end
                 
@@ -87,7 +87,8 @@ end
 
             trasa_mrowki(1,:)=trasa(i,:) %trasa i-tej mrówki(i-ty wiersz macierzy trasa)
             
-            wskaznik(i,1)=funkcjabledu(trasa_mrowki);
+           wskaznik(i,l)=funkcjabledu(trasa_mrowki); %zapisanie wskaznika w macierzy o wymiarach iter-kolumn M-wierszy
+           
             
             %aktualizacja lokalna feromonów
             trasa_w_wezlach(1,:)=ktory_wezel(i,:);
@@ -95,20 +96,31 @@ end
             drugi_el=trasa_w_wezlach(2);
             trzeci_el=trasa_w_wezlach(3);
             
-                      feromony(pierwszy_el,1)=feromony(pierwszy_el,1)+(Q/(wskaznik(i,1)));
-                      feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,1)));
-                      feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,1)));
- 
-           
-     end
+                      feromony(pierwszy_el,1)=feromony(pierwszy_el,1)+(Q/(wskaznik(i,l)));
+                      feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,l)));
+                      feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,l)));
+                      
+                      
+                      [E(l),F(l)]=min(wskaznik(:,l));
+                      
+     
+    
+                      
+    end
+    
 %     %sprawdzanie czy najlepszy wska¼nik
-        best_wskaznik_cyklu(l)=min(wskaznik);
-        the_best=min(best_wskaznik_cyklu);
+
+          [A,B]=min(wskaznik);  %dla iteracji D-- sprawdzam jaka jest warto¶c (tzn która mrówka najlepsza)
+          [C,D]=min(A); %D-która iteracja ma warto¶æ wska¼nika min
+       
 %     %aktualizacja globalna feromonów
-    feromony(i,j)=(1-ro).*feromony(i,j)+(1/(the_best));
-%     
+    for jj=1:n
+        for ii=1:H
+            feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/C);
+        end
+    end
+    
      end
-% 
 %     
 
 
