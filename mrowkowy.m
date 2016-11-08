@@ -1,10 +1,10 @@
 clear;
 clc;
 
-H=1000; %zakres zmian warto¶ci parametrów
+H=100; %zakres zmian warto¶ci parametrów
 M=30; %liczba mrówek
 n=3; %liczba parametrów
-iter=20; %max liczba iteracji
+iter=3; %max liczba iteracji
 alfa=2;
 Q=0.2;%wspó³czynnik skaluj±cy ilo¶æ zostawianych feromonów
 ro=0.05 %warto¶æ szybko¶ci parowania ¶ladu feromonowego
@@ -19,8 +19,8 @@ X3max=-100e-5;
 
 %Tworzenie macierzy mo¿liwych kandydatów do rozwi±zania dla ka¿dego z
 %parametrów X1=xxx(1),X2=xxx(2),X3=xxx(3)
-X1(1)=double(X1min);
-X1(H)=double(X1max);
+X1(1)=X1min;
+X1(H)=X1max;
 X2(1)=X2min;
 X2(H)=X2max;
 X3(1)=X3min;
@@ -54,12 +54,9 @@ for j=1:n
  
     end
 end
-
-
-
     
     
-     %pêtla wyboru wêz³a
+     %pêtla algorytmu
      for l=1:iter
          %tworzenie macierzy prawdopodobieñstw na podstawie wzoru
                 for g=1:n
@@ -68,8 +65,7 @@ end
                 prawdop=(1/s).*alfa_feromony; %feromony
                 end
     for i=1:M
-                
-                
+         %pêtla wyboru wêz³a
          for j=1:n
             r=rand;
             s=0;
@@ -84,7 +80,7 @@ end
             end    
        end
      
-         %wyznaczanie wskaznika jako¶ci dla trasy pierwszej mrówki
+         %wyznaczanie wskaznika jako¶ci dla trasy i-tej mrówki
 
             trasa_mrowki(1,:)=trasa(i,:) %trasa i-tej mrówki(i-ty wiersz macierzy trasa)
             
@@ -101,31 +97,40 @@ end
                       feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,l)));
                       feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,l)));
                       
-                      %     %sprawdzanie czy najlepszy wska¼nik
-                     if i>=2 && i<=M
-                         najlepsze_trasy(l,:)=trasa(1,:);
-                         
-                         if wskaznik(i,l)<=wskaznik(i-1,l)
-                         najlepszy(l,:)=wskaznik(i,l);
-                         najlepsze_trasy(l,:)=trasa(i,:);
-                         [A,B]=min(najlepszy);
-                         najlepsza_trasa=najlepsze_trasy(B,:);
-                         najlepszy_wskaznik=A;
-                        break
-                         end
-                     end
-                     
+                      %szukanie najlepszego wska¼nika
+                      min_wskaznik_iter(l,1)=min(wskaznik(:,l))
+                      [A,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
+                      [C,D]=min(wskaznik(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
+                      najlepsza_iteracja=B;
+                      najlepsza_mrowka=D;
+                      najlepszy_wskaznik=A;
+
+                      %rysowanie wykresów warto¶ci wskaznika dla ka¿dej z
+                      %mrówki w konkretnej iteracji
                       
-     
+                      figure(l)
+                      plot(wskaznik(:,l)),xlabel('mrówka (M)'),title('wskaznik (JE)'),grid
+                      
+                      
+%                       %     %sprawdzanie czy najlepszy wska¼nik
+%                      if i>=2 && i<=M
+%                          najlepsze_trasy(l,:)=trasa(1,:);
+%                          
+%                          if wskaznik(i,l)<=wskaznik(i-1,l)
+%                          najlepszy(l,:)=wskaznik(i,l);
+%                          najlepsze_trasy(l,:)=trasa(i,:);
+%                          [A,B]=min(najlepszy);
+%                          najlepsza_trasa=najlepsze_trasy(B,:);
+%                          najlepszy_wskaznik=A;
+%                         break
+%                          end
+%                      end
+                     
     
                       
     end
     
 
-
-%           [A,B]=min(wskaznik);  %dla iteracji D-- sprawdzam jaka jest warto¶c (tzn która mrówka najlepsza)
-%           [C,D]=min(A); %D-która iteracja ma warto¶æ wska¼nika min
-%        
 %     %aktualizacja globalna feromonów
     for jj=1:n
         for ii=1:H
