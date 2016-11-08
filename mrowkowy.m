@@ -44,7 +44,7 @@ kk3=rand;
 k3=(((-100e-5 - (-300e-5)) .* kk3) + (-300e-5)) - mod((((-100e-5 - (-300e-5)) .* kk3) + (-300e-5)) , 0.00000001);  
 K123=[k1 k2 k3]
 
-[blad_koncowy]=funkcjabledu(K123) %randomowy wska¼nik jako¶ci
+[blad_koncowy]=funkcjabledu(K123); %randomowy wska¼nik jako¶ci
 
 %Tworzenie macierzy feromonów na podstawie uzyskanego wy¿ej wska¼nika, dla
 %ka¿dego rozwi±zania macierzy taka sama warto¶æ
@@ -98,12 +98,15 @@ end
                       feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,l)));
                       
                       %szukanie najlepszego wska¼nika
-                      min_wskaznik_iter(l,1)=min(wskaznik(:,l))
+                      [min_wskaznik_iter(l,1),gdzie(l,1)]=min(wskaznik(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
                       [A,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
                       [C,D]=min(wskaznik(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
                       najlepsza_iteracja=B;
                       najlepsza_mrowka=D;
                       najlepszy_wskaznik=A;
+                      najlepsza_trasa_iteracji(l,:)=trasa(gdzie(l,1),:);
+                      najlepsza_trasa_calego_cyklu(1,:)=najlepsza_trasa_iteracji(B,:);
+                      
 
                       %rysowanie wykresów warto¶ci wskaznika dla ka¿dej z
                       %mrówki w konkretnej iteracji
@@ -125,12 +128,9 @@ end
 %                         break
 %                          end
 %                      end
-                     
-    
                       
     end
     
-
 %     %aktualizacja globalna feromonów
     for jj=1:n
         for ii=1:H
