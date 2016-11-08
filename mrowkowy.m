@@ -1,10 +1,10 @@
 clear;
 clc;
 
-H=100; %zakres zmian warto¶ci parametrów
+H=1000; %zakres zmian warto¶ci parametrów
 M=30; %liczba mrówek
 n=3; %liczba parametrów
-iter=3; %max liczba iteracji
+iter=10; %max liczba iteracji
 alfa=2;
 Q=0.2;%wspó³czynnik skaluj±cy ilo¶æ zostawianych feromonów
 ro=0.05 %warto¶æ szybko¶ci parowania ¶ladu feromonowego
@@ -73,7 +73,7 @@ end
             for k=1:H %numer wezla
                 s=s+prawdop(k,j);%uzycie kola ruletki
                 if r<=s
-                    trasa(i,j)=parametry(k,j); %zapisywana warto¶æ wybranego wêz³a w macierzy trasy
+                    trasa(i,j,l)=parametry(k,j); %zapisywana warto¶æ wybranego wêz³a w macierzy trasy
                     ktory_wezel(i,j)=k;
                     break
                 end
@@ -82,7 +82,7 @@ end
      
          %wyznaczanie wskaznika jako¶ci dla trasy i-tej mrówki
 
-            trasa_mrowki(1,:)=trasa(i,:) %trasa i-tej mrówki(i-ty wiersz macierzy trasa)
+            trasa_mrowki(1,:)=trasa(i,:,l) %trasa i-tej mrówki(i-ty wiersz macierzy trasa)
             
            wskaznik(i,l)=funkcjabledu(trasa_mrowki); %zapisanie wskaznika w macierzy o wymiarach iter-kolumn M-wierszy
            
@@ -96,17 +96,7 @@ end
                       feromony(pierwszy_el,1)=feromony(pierwszy_el,1)+(Q/(wskaznik(i,l)));
                       feromony(drugi_el,2)=feromony(drugi_el,2)+(Q/(wskaznik(i,l)));
                       feromony(trzeci_el,3)=feromony(trzeci_el,3)+(Q/(wskaznik(i,l)));
-                      
-                      %szukanie najlepszego wska¼nika
-                      [min_wskaznik_iter(l,1),gdzie(l,1)]=min(wskaznik(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
-                      [A,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
-                      [C,D]=min(wskaznik(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
-                      najlepsza_iteracja=B;
-                      najlepsza_mrowka=D;
-                      najlepszy_wskaznik=A;
-                      najlepsza_trasa_iteracji(l,:)=trasa(gdzie(l,1),:);
-                      najlepsza_trasa_calego_cyklu(1,:)=najlepsza_trasa_iteracji(B,:);
-                      
+               
 
                       %rysowanie wykresów warto¶ci wskaznika dla ka¿dej z
                       %mrówki w konkretnej iteracji
@@ -115,28 +105,30 @@ end
                       plot(wskaznik(:,l)),xlabel('mrówka (M)'),title('wskaznik (JE)'),grid
                       
                       
-%                       %     %sprawdzanie czy najlepszy wska¼nik
-%                      if i>=2 && i<=M
-%                          najlepsze_trasy(l,:)=trasa(1,:);
-%                          
-%                          if wskaznik(i,l)<=wskaznik(i-1,l)
-%                          najlepszy(l,:)=wskaznik(i,l);
-%                          najlepsze_trasy(l,:)=trasa(i,:);
-%                          [A,B]=min(najlepszy);
-%                          najlepsza_trasa=najlepsze_trasy(B,:);
-%                          najlepszy_wskaznik=A;
-%                         break
-%                          end
-%                      end
                       
     end
-    
+    %szukanie najlepszego wska¼nika danej iteracji
+                      A=min(wskaznik(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
+                      
 %     %aktualizacja globalna feromonów
     for jj=1:n
         for ii=1:H
             feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/A);
         end
     end
+                      
+                      %szukanie najlepszego wska¼nika i trasy ze wszystkich
+                      %iteracji
+                      [min_wskaznik_iter(l,1),gdzie(l,1)]=min(wskaznik(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
+                      [E,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
+                      [C,D]=min(wskaznik(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
+                      najlepsza_iteracja=B;
+                      najlepsza_mrowka=D;
+                      najlepszy_wskaznik=E;
+                      najlepsza_trasa_ever(1,:)=trasa(D,:,B)
+                      
+
+           
     
      end
 %     
