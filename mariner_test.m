@@ -25,7 +25,7 @@ global transfer1;
 
 para = [-100e-5, 270e-5, -160e-5];
 
-[blad_koncowy]=funkcjabledu(para);
+[blad_koncowy_AM]=funkcjabledu(najlepsza_trasa_ever);
 
 %[x, fval] = fminunc(@funkcjabledu, para);
 

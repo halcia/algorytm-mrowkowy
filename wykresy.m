@@ -7,7 +7,7 @@ t_rudderexecute = 100;   % time rudder is executed (sec)
 h = 0.1;                 % sampling time (sec)
 para = [-100e-5, 270e-5, -160e-5];
 
-[t1,u1,v1,r1,x1,y1,psi1,U1,Nrudder1, advance, transfer] = MyTurncircle('MyMariner',x,ui,t_final,t_rudderexecute,h,para);
+[t1,u1,v1,r1,x1,y1,psi1,U1,Nrudder1, advance, transfer] = MyTurncircle('MyMariner',x,ui,t_final,t_rudderexecute,h,najlepsza_trasa_ever);
 
 figure(1)
 subplot(211),plot(t1,r1,'b'),xlabel('time (s)'),title('yaw rate r (deg/s)'),grid
