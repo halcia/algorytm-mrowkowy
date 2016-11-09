@@ -1,5 +1,4 @@
-clear;
-clc;
+init;
 
 H=1000;         %próbkowanie przestrzeni rozwi¹zañ
 M=30;           %liczba mrówek
@@ -16,6 +15,7 @@ macierzBledow = zeros(iter, n);
 wBledowIter = zeros(iter); %<£K> najmniejszy b³¹d uzyskany w danej iteracji
 najWIter = zeros(iter); %<£K> œledzi zmiany najlepszego rozwi¹zania (do wykresu)
 najlepszaMrowka = [0, 0]; %<£K> indeks najlepszej mrówki
+
 %Za³o¿one wartoœci graniczne dla parametrow X1,X2,X3
 X1min=-300e-5;
 X1max=-100e-5;
@@ -99,6 +99,9 @@ feromony(:) = blad_0;
 
  %pêtla algorytmu
  for l=1:iter
+     %<£K> ; je¿eli irytuje
+     info = ['Iteracja ', num2str(l)];
+     disp(info)
      %tworzenie macierzy prawdopodobieñstw na podstawie wzoru
     for g=1:n
         alfa_feromony=feromony.^alfa;
@@ -106,6 +109,9 @@ feromony(:) = blad_0;
         prawdop=(1/s).*alfa_feromony; %feromony
     end
     for i=1:M
+        %<£K> ; je¿eli irytuje
+        info = ['Mrowka ', num2str(i)];
+        disp(info)
         %pêtla wyboru wêz³a
         for j=1:n
             r=rand;
@@ -168,7 +174,8 @@ feromony(:) = blad_0;
             feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/minBlad);
         end
     end
-    najlepszeMrowka
+    minBlad
+    najlepszaMrowka
     parametry = [X1(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 1)),...
                  X2(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 2)),... 
                  X3(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 3))]
@@ -184,6 +191,9 @@ feromony(:) = blad_0;
 %     najlepszy_wskaznik=E;
 %     najlepsza_trasa_ever(1,:)=trasa(D,:,B)
  end
-%     
+figure(1)
+plot(wBledowIter);
+figure(2)
+plot(najWIter);
 
 

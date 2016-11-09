@@ -48,7 +48,7 @@ N = round(t_final/h);               % number of samples
 xout = zeros(N+1,8);                % memory allocation
 store1 = 1; store2 = 1;             % logical variables (0,1)
 
-disp('Simulating...')
+% disp('Simulating...')
 
 for i=1:N+1,
     time = (i-1)*h;
