@@ -14,6 +14,7 @@ feromony = zeros(H,n);
 trasa = zeros(iter, M, n);
 macierzBledow = zeros(iter, n);
 wBledowIter = zeros(iter); %<£K> najmniejszy b³¹d uzyskany w danej iteracji
+najWIter = zeros(iter); %<£K> œledzi zmiany najlepszego rozwi¹zania (do wykresu)
 najlepszaMrowka = [0, 0]; %<£K> indeks najlepszej mrówki
 %Za³o¿one wartoœci graniczne dla parametrow X1,X2,X3
 X1min=-300e-5;
@@ -57,7 +58,7 @@ end;
 % </£K>
 
 % tablica z mo¿liwymi rozwi¹zaniami
-parametry=[X1',X2',X3'];
+% parametry=[X1',X2',X3'];
 
 %  %losowanie randomowej wartosci dla pierwszych parametrów X1,X2,X3 z zakresu
 % %X1min-X1max
@@ -72,13 +73,13 @@ parametry=[X1',X2',X3'];
 % <£K>
 % Moja propozycja :)
 % </£K>
-X1_0 = parametry(randi([1, H],1,1),1);
-X2_0 = parametry(randi([1, H],1,1),2);
-X3_0 = parametry(randi([1, H],1,1),3);
+X1_0 = X1(randi([1, H],1,1));
+X2_0 = X2(randi([1, H],1,1));
+X3_0 = X3(randi([1, H],1,1));
 X0 = [X1_0, X2_0, X3_0];
 
 blad_0 = funkcjabledu(X0); % b³¹d na podstawie losowych wartoœci X
-feromon_0 = 1/blad_0;
+feromon_0 = 1/blad_0; % wartoœæ pocz¹tkowa feromonów
 
 minBlad = blad_0; %<£K> najmniejszy uzyskany b³¹d we wszystkich iteracjach;
                   %inicjalizuje b³êdem pocz¹tkowym</£K> 
@@ -122,12 +123,21 @@ feromony(:) = blad_0;
                 end
             end    
         end
-%       <£K>
-%       nie zmieni³em nic w zasadzie dzia³anie, dostosowa³em tylko do
-%       w³asnych oznaczeñ
-%       </£K>
+        %<£K>
+        %nie zmieni³em nic w zasadzie dzia³anie, dostosowa³em tylko do
+        %w³asnych oznaczeñ
+        %</£K>
         %wyznaczanie wskaznika jako¶ci dla trasy i-tej mrówki
         macierzBledow(l,i)=funkcjabledu([X1(trasa(l,i,1)), X2(trasa(l,i,2)), X3(trasa(l,i,3))]); %zapisanie wskaznika w macierzy o wymiarach iter-kolumn M-wierszy
+        %<£K>
+        %Sprawdzam przy ka¿dym b³êdzie czy jest mniejszy od najmniejszego
+        %uzyskanego, na taj podstawie znajdujê najmniejszy b³¹d i najlepsz¹
+        %mrówkê
+        %</£K>
+        if (macierzBledow(l,i) < minBlad)
+            minBlad = macierzBledow(l,i);
+            najlepszaMrowka = [l ,i];
+        end
         %aktualizacja lokalna feromonów
         feromony(trasa(l,i,1),1) = feromony(trasa(l,i,1),1) + (Q/macierzBledow(l,i));
         feromony(trasa(l,i,2),2) = feromony(trasa(l,i,2),2) + (Q/macierzBledow(l,i));
@@ -148,24 +158,31 @@ feromony(:) = blad_0;
 %         plot(macierzBledow(:,l)),xlabel('mrówka (M)'),title('wskaznik (JE)'),grid
     end
     %szukanie najlepszego wska¼nika danej iteracji
-    A=min(macierzBledow(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
-
+    wBledowIter(l) = min(macierzBledow(l,:)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
+    najWIter(l) = minBlad; %<£K> do wykresu
     %aktualizacja globalna feromonów
+    
+    %<£K> nie jestem pewien, ale chyba trzeba najlepszym znalezionym
     for jj=1:n
         for ii=1:H
-            feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/A);
+            feromony(ii,jj)=(1-ro).*feromony(ii,jj)+(1/minBlad);
         end
     end
-
+    najlepszeMrowka
+    parametry = [X1(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 1)),...
+                 X2(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 2)),... 
+                 X3(trasa(najlepszaMrowka(1,1), najlepszaMrowka(1,2), 3))]
+    
+    
     %szukanie najlepszego wska¼nika i trasy ze wszystkich
     %iteracji
-    [min_wskaznik_iter(l,1),gdzie(l,1)]=min(macierzBledow(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
-    [E,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
-    [C,D]=min(macierzBledow(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
-    najlepsza_iteracja=B;
-    najlepsza_mrowka=D;
-    najlepszy_wskaznik=E;
-    najlepsza_trasa_ever(1,:)=trasa(D,:,B)
+%     [min_wskaznik_iter(l,1),gdzie(l,1)]=min(macierzBledow(:,l)); %minimalne wskazniki dla kazdej z iteracji oraz gdzie- ktora mrowka 
+%     [E,B]=min(min_wskaznik_iter) %A-warto¶æ najmniejszego wskaznika, B-w której iteracji wyst±pi³ najmniejszy wskaznik
+%     [C,D]=min(macierzBledow(:,B)); %C-warto¶æ najmniejszego wskaznika, D-numer najlepszej mrówki (tzn. takiej która uzyska³a najmniejszy wskaznik)
+%     najlepsza_iteracja=B;
+%     najlepsza_mrowka=D;
+%     najlepszy_wskaznik=E;
+%     najlepsza_trasa_ever(1,:)=trasa(D,:,B)
  end
 %     
 
