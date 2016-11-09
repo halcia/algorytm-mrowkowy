@@ -3,7 +3,7 @@ tic;
 H=1000;         %próbkowanie przestrzeni rozwi¹zañ
 M=30;           %liczba mrówek
 n=3;            %liczba parametrów
-iter=10;        %max liczba iteracji
+iter=300;        %max liczba iteracji
 alfa=2;         %wspó³czynnik wzmocnienia feromonów
 Q=0.2;          %wspó³czynnik skaluj¹cy feromonów
 ro=0.05;        %wspó³czynnik parowania feromonów
