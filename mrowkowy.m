@@ -1,5 +1,5 @@
 init;
-
+tic;
 H=1000;         %próbkowanie przestrzeni rozwi¹zañ
 M=30;           %liczba mrówek
 n=3;            %liczba parametrów
@@ -191,6 +191,7 @@ feromony(:) = blad_0;
 %     najlepszy_wskaznik=E;
 %     najlepsza_trasa_ever(1,:)=trasa(D,:,B)
  end
+ toc
 figure(1)
 plot(wBledowIter);
 figure(2)
